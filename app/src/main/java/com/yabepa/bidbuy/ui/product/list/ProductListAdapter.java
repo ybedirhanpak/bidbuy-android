@@ -1,6 +1,6 @@
-package com.yabepa.bidbuy.ui.product;
+package com.yabepa.bidbuy.ui.product.list;
 
-import androidx.navigation.NavController;
+import androidx.annotation.NonNull;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +24,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         productList = items;
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -42,7 +43,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         return productList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView textViewId;
         public final TextView textViewName;
@@ -50,8 +51,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            textViewId = (TextView) view.findViewById(R.id.product_number);
-            textViewName = (TextView) view.findViewById(R.id.product_name);
+            textViewId = view.findViewById(R.id.product_number);
+            textViewName = view.findViewById(R.id.product_name);
         }
 
         public void bind(Product product) {
@@ -64,6 +65,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             });
         }
 
+        @NonNull
         @Override
         public String toString() {
             return super.toString() + " '" + textViewName.getText() + "'";

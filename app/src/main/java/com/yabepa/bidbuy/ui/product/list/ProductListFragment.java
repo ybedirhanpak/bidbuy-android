@@ -1,4 +1,4 @@
-package com.yabepa.bidbuy.ui.product;
+package com.yabepa.bidbuy.ui.product.list;
 
 import android.content.Context;
 import android.os.Bundle;

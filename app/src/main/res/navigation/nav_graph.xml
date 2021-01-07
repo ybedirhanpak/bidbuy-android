@@ -24,7 +24,7 @@
     </fragment>
     <fragment
         android:id="@+id/productListFragment"
-        android:name="com.yabepa.bidbuy.ui.product.ProductListFragment"
+        android:name="com.yabepa.bidbuy.ui.product.list.ProductListFragment"
         android:label="Product List"
         tools:layout="@layout/fragment_product_list" >
         <action
