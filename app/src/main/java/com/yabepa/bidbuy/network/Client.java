@@ -1,51 +1,51 @@
 package com.yabepa.bidbuy.network;
 
-import java.io.DataOutputStream;
+import android.os.Handler;
+import android.os.Looper;
+
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-
-import bidbuy.network.Request;
-import bidbuy.network.Response;
-
+import com.google.gson.Gson;
 import com.yabepa.bidbuy.common.Callback;
-import com.yabepa.bidbuy.data.Product;
+import com.yabepa.bidbuy.common.Util;
+
 
 public class Client {
-    public void sendMessage(String message) {
-        try {
-            Socket clientSocket = new Socket("192.168.1.67", 9000);
-            DataOutputStream toServer = new DataOutputStream(clientSocket.getOutputStream());
-            toServer.writeBytes(message);
-            clientSocket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
-    public void sendRequest(
+    private static final String SERVER_IP = "192.168.1.67";
+    private static final int SERVER_PORT = 9000;
+
+    private static final Gson gson = new Gson();
+
+    public static void sendRequest(
             String identifier,
             Object body,
-            Callback.Success<Response> success,
+            Callback.Success<Object> success,
             Callback.Error<String> error
     ) {
         Request request = new Request(identifier, body);
-        Thread requestThread = new Thread(() -> {
+        new Thread(() -> {
             try {
-                Socket clientSocket = new Socket("192.168.1.67", 9000);
-                ObjectOutputStream objectToServer = new ObjectOutputStream(clientSocket.getOutputStream());
-                objectToServer.writeObject(request);
-                ObjectInputStream responseFromServer = new ObjectInputStream(clientSocket.getInputStream());
-                Response response = (Response) responseFromServer.readObject();
-                success.onSuccess(response);
+                Socket clientSocket = new Socket(SERVER_IP, SERVER_PORT);
+
+                // Send request
+                String requestJson = gson.toJson(request);
+                Util.writeJsonToOutputStream(requestJson, clientSocket.getOutputStream());
+
+                // Receive response
+                String responseJson = Util.inputStreamToJson(clientSocket.getInputStream());
+                Response response = gson.fromJson(responseJson, Response.class);
+
+                // Execute callback on main thread
+                new Handler(Looper.getMainLooper()).post(() -> success.onSuccess(response.body));
+
                 clientSocket.close();
-            } catch (IOException | ClassNotFoundException e) {
-                error.onError("Error occurred while sending request");
+            } catch (IOException e) {
+                // Execute callback on main thread
+                new Handler(Looper.getMainLooper()).post(() -> error.onError("Error occurred while sending request"));
                 e.printStackTrace();
             }
-        });
-        requestThread.start();
+        }).start();
     }
 }
