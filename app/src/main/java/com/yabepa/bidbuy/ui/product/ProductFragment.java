@@ -20,7 +20,7 @@ import com.yabepa.bidbuy.network.Client;
 public class ProductFragment extends Fragment {
 
     private static final String ARG_PRODUCT_ID = "productID";
-    private String productID = "Empty product";
+    private String productID = "0";
 
     private FragmentProductBinding binding;
 
@@ -63,7 +63,8 @@ public class ProductFragment extends Fragment {
         binding.buttonIncreasePrice.setOnClickListener(buttonView -> {
             client.sendRequest("increaseValue", null,
                     response -> {
-                        binding.setProduct(new Product(response.body.toString()));
+                        String price = response.body.toString();
+                        binding.setProduct(new Product("productID", "Product name", price));
                     },
                     error -> {
                         new Handler(Looper.getMainLooper()).post(() -> {
