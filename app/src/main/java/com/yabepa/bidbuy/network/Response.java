@@ -1,9 +1,9 @@
 package com.yabepa.bidbuy.network;
 
-public class Response {
-    Object body;
+public class Response<T> {
+    T body;
 
-    public Response(Object body) {
+    public Response(T body) {
         this.body = body;
     }
 }

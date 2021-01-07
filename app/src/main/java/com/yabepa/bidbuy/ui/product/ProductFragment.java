@@ -50,7 +50,5 @@ public class ProductFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         binding.textViewProduct.setText(productID);
-
-        binding.buttonIncreasePrice.setOnClickListener(buttonView -> viewModel.increasePrice());
     }
 }

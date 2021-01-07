@@ -3,7 +3,9 @@ package com.yabepa.bidbuy.ui.product.list;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,13 +15,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.yabepa.bidbuy.R;
-import com.yabepa.bidbuy.ui.product.dummy.DummyContent;
+import com.yabepa.bidbuy.data.Product;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ProductListFragment extends Fragment {
 
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
+
+    private ProductListAdapter adapter;
+
+    private final List<Product> productList = new ArrayList<>();
 
     public ProductListFragment() {
     }
@@ -47,8 +56,21 @@ public class ProductListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new ProductListAdapter(DummyContent.ITEMS));
+            adapter = new ProductListAdapter(productList);
+            recyclerView.setAdapter(adapter);
         }
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ProductListViewModel viewModel = new ViewModelProvider(this).get(ProductListViewModel.class);
+        viewModel.getProductList().observe(requireActivity(), products -> {
+            productList.clear();
+            productList.addAll(products);
+            adapter.notifyDataSetChanged();
+        });
+        viewModel.fetchProductList();
     }
 }

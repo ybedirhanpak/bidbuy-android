@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.yabepa.bidbuy.data.Product;
-import com.yabepa.bidbuy.network.Client;
 
 public class ProductViewModel extends ViewModel {
 
@@ -16,13 +15,5 @@ public class ProductViewModel extends ViewModel {
         }
 
         return currentProduct;
-    }
-
-    public void increasePrice() {
-        Client.sendRequest("increaseValue", null, value -> {
-            Product updatedProduct = new Product(getCurrentProduct().getValue());
-            updatedProduct.price = value.toString();
-            getCurrentProduct().setValue(updatedProduct);
-        }, System.out::println);
     }
 }

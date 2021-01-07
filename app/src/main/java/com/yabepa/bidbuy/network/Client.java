@@ -4,11 +4,15 @@ import android.os.Handler;
 import android.os.Looper;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.Socket;
+import java.util.List;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.yabepa.bidbuy.common.Callback;
 import com.yabepa.bidbuy.common.Util;
+import com.yabepa.bidbuy.data.Product;
 
 
 public class Client {
@@ -18,10 +22,12 @@ public class Client {
 
     private static final Gson gson = new Gson();
 
-    public static void sendRequest(
+    public static <T> void sendRequest(
             String identifier,
             Object body,
-            Callback.Success<Object> success,
+            Class<?> responseClass,
+            boolean isList,
+            Callback.Success<T> success,
             Callback.Error<String> error
     ) {
         Request request = new Request(identifier, body);
@@ -35,7 +41,8 @@ public class Client {
 
                 // Receive response
                 String responseJson = Util.inputStreamToJson(clientSocket.getInputStream());
-                Response response = gson.fromJson(responseJson, Response.class);
+                Type responseType = getResponseType(responseClass, isList);
+                Response<T> response = gson.fromJson(responseJson, responseType);
 
                 // Execute callback on main thread
                 new Handler(Looper.getMainLooper()).post(() -> success.onSuccess(response.body));
@@ -47,5 +54,14 @@ public class Client {
                 e.printStackTrace();
             }
         }).start();
+    }
+
+    private static <T> Type getResponseType(Class<T> className, boolean isList) {
+        if(isList) {
+            Type listOfT = TypeToken.getParameterized(List.class, className).getType();
+            return TypeToken.getParameterized(Response.class, listOfT).getType();
+        }
+
+        return TypeToken.getParameterized(Response.class, className).getType();
     }
 }
