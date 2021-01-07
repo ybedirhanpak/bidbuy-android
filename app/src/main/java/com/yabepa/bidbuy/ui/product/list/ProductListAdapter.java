@@ -56,11 +56,11 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         }
 
         public void bind(Product product) {
-            textViewId.setText(product.id);
+            textViewId.setText(product.getIdString());
             textViewName.setText(product.name);
             mView.setOnClickListener(view -> {
                 Bundle bundle = new Bundle();
-                bundle.putString("productID", product.id);
+                bundle.putInt("productID", product.id);
                 Navigation.findNavController(view).navigate(R.id.action_productListFragment_to_productFragment, bundle);
             });
         }

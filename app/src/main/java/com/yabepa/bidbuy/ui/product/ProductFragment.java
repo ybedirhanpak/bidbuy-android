@@ -16,17 +16,15 @@ import com.yabepa.bidbuy.databinding.FragmentProductBinding;
 public class ProductFragment extends Fragment {
 
     private static final String ARG_PRODUCT_ID = "productID";
-    private String productID = "0";
+    private int productID = 0;
 
     private FragmentProductBinding binding;
-
-    private ProductViewModel viewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            productID = getArguments().getString(ARG_PRODUCT_ID);
+            productID = getArguments().getInt(ARG_PRODUCT_ID);
         }
     }
 
@@ -41,14 +39,8 @@ public class ProductFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = new ViewModelProvider(this).get(ProductViewModel.class);
-        viewModel.getCurrentProduct().observe(requireActivity(), product -> binding.setProduct(product));
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        binding.textViewProduct.setText(productID);
+        ProductViewModel viewModel = new ViewModelProvider(this).get(ProductViewModel.class);
+        viewModel.getProduct().observe(requireActivity(), product -> binding.setProduct(product));
+        viewModel.fetchProduct(productID);
     }
 }
