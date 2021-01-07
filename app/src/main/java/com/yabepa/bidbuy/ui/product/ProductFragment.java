@@ -5,17 +5,13 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.yabepa.bidbuy.data.Product;
 import com.yabepa.bidbuy.databinding.FragmentProductBinding;
-import com.yabepa.bidbuy.network.Client;
 
 public class ProductFragment extends Fragment {
 
@@ -24,19 +20,7 @@ public class ProductFragment extends Fragment {
 
     private FragmentProductBinding binding;
 
-    private Client client = new Client();
-
-    public ProductFragment() {
-        // Required empty public constructor
-    }
-
-    public static ProductFragment newInstance(String param1) {
-        ProductFragment fragment = new ProductFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PRODUCT_ID, param1);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private ProductViewModel viewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,11 +31,18 @@ public class ProductFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentProductBinding.inflate(inflater, container, false);
         return binding.getRoot();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        viewModel = new ViewModelProvider(this).get(ProductViewModel.class);
+        viewModel.getCurrentProduct().observe(requireActivity(), product -> binding.setProduct(product));
     }
 
     @Override
@@ -60,17 +51,6 @@ public class ProductFragment extends Fragment {
 
         binding.textViewProduct.setText(productID);
 
-        binding.buttonIncreasePrice.setOnClickListener(buttonView -> {
-            client.sendRequest("increaseValue", null,
-                    response -> {
-                        String price = response.body.toString();
-                        binding.setProduct(new Product("productID", "Product name", price));
-                    },
-                    error -> {
-                        new Handler(Looper.getMainLooper()).post(() -> {
-                            Toast.makeText(requireActivity(), error, Toast.LENGTH_SHORT).show();
-                        });
-                    });
-        });
+        binding.buttonIncreasePrice.setOnClickListener(buttonView -> viewModel.increasePrice());
     }
 }
