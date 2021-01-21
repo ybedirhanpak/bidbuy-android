@@ -37,6 +37,9 @@ public class HomeFragment extends Fragment {
 
         binding.buttonNavigateRegister.setOnClickListener(buttonView ->
                 Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_registerFragment));
+
+        binding.buttonNavigateProductCreate.setOnClickListener(buttonView ->
+                Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_productCreateFragment));
     }
 
     @Override

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.product.create.ProductCreateFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingVertical="@dimen/padding_md"
+        android:paddingHorizontal="@dimen/padding_lg"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_md"
+            android:text="@string/image"
+            android:textColor="@color/purple_500"
+            android:textSize="@dimen/text_md" />
+
+        <ImageView
+            android:contentDescription="@string/product_image"
+            android:id="@+id/product_image"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:src="@drawable/ic_launcher_background" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/margin_md"
+            android:text="@string/name"
+            android:textColor="@color/purple_500"
+            android:textSize="@dimen/text_md" />
+
+        <EditText
+            android:id="@+id/product_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="name"
+            android:hint="@string/name"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/margin_md"
+            android:text="@string/min_price"
+            android:textColor="@color/purple_500"
+            android:textSize="@dimen/text_md" />
+
+        <EditText
+            android:id="@+id/product_min_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="price"
+            android:hint="@string/min_price"
+            android:inputType="numberDecimal" />
+
+        <Button
+            android:id="@+id/button_product_create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/margin_md"
+            android:text="@string/create"/>
+
+    </LinearLayout>
+
+</ScrollView>

@@ -8,5 +8,11 @@
     <string name="login">Login</string>
     <string name="register">Register</string>
     <!--  Product  -->
+    <string name="product_create">Product Create</string>
     <string name="product_image">Product Image</string>
+    <string name="name">Name</string>
+    <string name="min_price">Minimum Price</string>
+    <string name="deadline">Deadline</string>
+    <string name="image">Image</string>
+    <string name="create">Create</string>
 </resources>

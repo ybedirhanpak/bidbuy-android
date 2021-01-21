@@ -42,6 +42,13 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_productCreateFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:destination="@id/productCreateFragment" />
     </fragment>
     <fragment
         android:id="@+id/productListFragment"
@@ -66,5 +73,10 @@
         android:name="com.yabepa.bidbuy.ui.register.RegisterFragment"
         android:label="Register"
         tools:layout="@layout/register_fragment" />
+    <fragment
+        android:id="@+id/productCreateFragment"
+        android:name="com.yabepa.bidbuy.ui.product.create.ProductCreateFragment"
+        android:label="product_create_fragment"
+        tools:layout="@layout/product_create_fragment" />
 
 </navigation>
