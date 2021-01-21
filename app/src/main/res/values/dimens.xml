@@ -8,4 +8,8 @@
     <dimen name="margin_sm">8dp</dimen>
     <dimen name="margin_md">16dp</dimen>
     <dimen name="margin_lg">24dp</dimen>
+    <dimen name="text_xs">8sp</dimen>
+    <dimen name="text_sm">12sp</dimen>
+    <dimen name="text_md">16sp</dimen>
+    <dimen name="text_lg">32sp</dimen>
 </resources>
