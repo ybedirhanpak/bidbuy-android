@@ -31,6 +31,12 @@ public class HomeFragment extends Fragment {
 
         binding.buttonNavigateProductList.setOnClickListener(buttonView ->
                 Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_productListFragment));
+
+        binding.buttonNavigateLogin.setOnClickListener(buttonView ->
+                Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_loginFragment));
+
+        binding.buttonNavigateRegister.setOnClickListener(buttonView ->
+                Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_registerFragment));
     }
 
     @Override
