@@ -76,7 +76,7 @@
     <fragment
         android:id="@+id/productCreateFragment"
         android:name="com.yabepa.bidbuy.ui.product.create.ProductCreateFragment"
-        android:label="product_create_fragment"
+        android:label="Product Create"
         tools:layout="@layout/product_create_fragment" />
 
 </navigation>
