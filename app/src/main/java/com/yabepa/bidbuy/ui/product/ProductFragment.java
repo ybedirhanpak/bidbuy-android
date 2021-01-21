@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.squareup.picasso.Picasso;
 import com.yabepa.bidbuy.data.IPreviewItem;
 import com.yabepa.bidbuy.databinding.FragmentProductBinding;
 import com.yabepa.bidbuy.ui.common.PreviewListAdapter;
@@ -66,10 +67,16 @@ public class ProductFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         ProductViewModel viewModel = new ViewModelProvider(this).get(ProductViewModel.class);
         viewModel.getProduct().observe(requireActivity(), product -> {
+            // Update product
             binding.setProduct(product);
+            // Update preview list
             this.previewList.clear();
             this.previewList.addAll(product.generatePreviewList());
             this.adapter.notifyDataSetChanged();
+            // Update product image
+            if (product.imageURL != null && !product.imageURL.equals("")) {
+                Picasso.get().load(product.imageURL).into(binding.productImage);
+            }
         });
         viewModel.fetchProduct(productID);
     }

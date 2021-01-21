@@ -11,6 +11,7 @@ public class Product {
     public int ownerId;
     public int lastBidId;
     public boolean isSold;
+    public String imageURL;
 
     public Product(int id) {
         this.id = id;
@@ -35,6 +36,7 @@ public class Product {
         this.ownerId = product.ownerId;
         this.lastBidId = product.lastBidId;
         this.isSold = product.isSold;
+        this.imageURL = product.imageURL;
     }
 
     public String getIdString() {
@@ -74,7 +76,16 @@ public class Product {
         previewList.add(new PreviewItem("Owner Id", getOwnerString()));
         previewList.add(new PreviewItem("Last Bid Id", getLastBidString()));
         previewList.add(new PreviewItem("Is Sold ?", getIsSoldString()));
+        previewList.add(new PreviewItem("Image URL", imageURL));
 
         return previewList;
+    }
+
+    public String getImageHeight() {
+        if(this.imageURL != null && !this.imageURL.equals("")) {
+            return "200dp";
+        }
+
+        return "0dp";
     }
 }

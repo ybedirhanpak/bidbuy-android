@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.yabepa.bidbuy.R;
 import com.yabepa.bidbuy.data.Product;
 
@@ -47,17 +49,26 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         public final View mView;
         public final TextView textViewId;
         public final TextView textViewName;
+        public final TextView textViewPrice;
+        public final ImageView imageView;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             textViewId = view.findViewById(R.id.product_number);
             textViewName = view.findViewById(R.id.product_name);
+            textViewPrice = view.findViewById(R.id.product_price);
+            imageView = view.findViewById(R.id.product_image);
         }
 
         public void bind(Product product) {
             textViewId.setText(product.getIdString());
             textViewName.setText(product.name);
+            String price = "₺" + product.price;
+            textViewPrice.setText(price);
+            if (product.imageURL != null && !product.imageURL.equals("")) {
+                Picasso.get().load(product.imageURL).into(imageView);
+            }
             mView.setOnClickListener(view -> {
                 Bundle bundle = new Bundle();
                 bundle.putInt("productID", product.id);
