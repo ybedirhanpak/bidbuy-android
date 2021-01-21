@@ -29,11 +29,8 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.buttonNavigateProduct.setOnClickListener(buttonView -> {
-            Bundle bundle = new Bundle();
-            bundle.putString("productID", binding.editProductId.getText().toString());
-            Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_productFragment, bundle);
-        });
+        binding.buttonNavigateProductList.setOnClickListener(buttonView ->
+                Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_productListFragment));
     }
 
     @Override
