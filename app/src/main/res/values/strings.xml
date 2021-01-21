@@ -2,4 +2,9 @@
     <string name="app_name">bidbuy</string>
     <string name="go_to_product_list">Go to product list</string>
     <string name="increase">Increase</string>
+    <!--  Login/Register Pages  -->
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
 </resources>
