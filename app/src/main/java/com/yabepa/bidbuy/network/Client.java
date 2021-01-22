@@ -7,12 +7,14 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.Socket;
 import java.util.List;
+import java.util.Objects;
 
 import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 import com.yabepa.bidbuy.common.Callback;
 import com.yabepa.bidbuy.common.Util;
-import com.yabepa.bidbuy.data.Product;
+import com.yabepa.bidbuy.dto.Message;
 
 
 public class Client {
@@ -28,7 +30,7 @@ public class Client {
             Class<?> responseClass,
             boolean isList,
             Callback.Success<T> success,
-            Callback.Error<String> error
+            Callback.Error<Message> error
     ) {
         Request request = new Request(identifier, body);
         new Thread(() -> {
@@ -41,23 +43,28 @@ public class Client {
 
                 // Receive response
                 String responseJson = Util.inputStreamToJson(clientSocket.getInputStream());
-                Type responseType = getResponseType(responseClass, isList);
-                Response<T> response = gson.fromJson(responseJson, responseType);
-
-                // Execute callback on main thread
-                new Handler(Looper.getMainLooper()).post(() -> success.onSuccess(response.body));
-
+                LinkedTreeMap<?, ?> responseTree = gson.fromJson(responseJson, LinkedTreeMap.class);
+                int statusCode = ((Double) Objects.requireNonNull(responseTree.get("statusCode"))).intValue();
+                if (statusCode <= 200) {
+                    // Execute callback on main thread
+                    Type responseType = getResponseType(responseClass, isList);
+                    Response<T> response = gson.fromJson(responseJson, responseType);
+                    new Handler(Looper.getMainLooper()).post(() -> success.onSuccess(response.body));
+                } else {
+                    Response<Message> response = gson.fromJson(responseJson, getResponseType(Message.class, false));
+                    new Handler(Looper.getMainLooper()).post(() -> error.onError(response.body));
+                }
                 clientSocket.close();
             } catch (IOException e) {
                 // Execute callback on main thread
-                new Handler(Looper.getMainLooper()).post(() -> error.onError("Error occurred while sending request"));
+                new Handler(Looper.getMainLooper()).post(() -> error.onError(new Message("Error occurred while sending request")));
                 e.printStackTrace();
             }
         }).start();
     }
 
     private static <T> Type getResponseType(Class<T> className, boolean isList) {
-        if(isList) {
+        if (isList) {
             Type listOfT = TypeToken.getParameterized(List.class, className).getType();
             return TypeToken.getParameterized(Response.class, listOfT).getType();
         }

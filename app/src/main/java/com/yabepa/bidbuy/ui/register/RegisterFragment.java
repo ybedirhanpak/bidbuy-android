@@ -13,19 +13,35 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.yabepa.bidbuy.R;
+import com.yabepa.bidbuy.databinding.RegisterFragmentBinding;
 
 public class RegisterFragment extends Fragment {
+
+    private RegisterViewModel viewModel;
+    private RegisterFragmentBinding binding;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.register_fragment, container, false);
+        binding = RegisterFragmentBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        RegisterViewModel mViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
+        viewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        binding.buttonRegister.setOnClickListener(buttonView -> {
+            String username = binding.editTextUsername.getText().toString();
+            String password = binding.editTextPassword.getText().toString();
+
+            viewModel.register(username, password);
+        });
+    }
 }
