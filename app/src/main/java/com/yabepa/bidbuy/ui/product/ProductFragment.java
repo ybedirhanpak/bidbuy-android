@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,8 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.yabepa.bidbuy.R;
 import com.yabepa.bidbuy.data.IPreviewItem;
 import com.yabepa.bidbuy.databinding.FragmentProductBinding;
 import com.yabepa.bidbuy.ui.common.PreviewListAdapter;
@@ -69,6 +72,13 @@ public class ProductFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         ProductViewModel viewModel = new ViewModelProvider(this).get(ProductViewModel.class);
+        sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE);
+
+        // Get logged in user
+        String username = sharedPref.getString(getString(R.string.sp_username), "");
+        int userId = sharedPref.getInt(getString(R.string.sp_userId), -1);
+
+        // Update fragment content when product is changed
         viewModel.getProduct().observe(requireActivity(), product -> {
             // Update product
             binding.setProduct(product);
@@ -81,6 +91,23 @@ public class ProductFragment extends Fragment {
                 Picasso.get().load(product.imageURL).into(binding.productImage);
             }
         });
+
+        // Fetch product from server
         viewModel.fetchProduct(productID);
+
+        binding.buttonGiveBid.setOnClickListener(buttonView -> {
+            if (username.equals("") && userId == -1) {
+                // There is already a user logged in
+                Toast.makeText(requireActivity(), "You need to log in first", Toast.LENGTH_SHORT).show();
+            } else {
+                double bid = Double.parseDouble(binding.editTextBid.getText().toString());
+                viewModel.giveBid(productID, userId, bid,
+                        bidCreated -> {
+                            Toast.makeText(requireActivity(), "Bid is created: " + bidCreated.price, Toast.LENGTH_SHORT).show();
+                        }, error -> {
+                            Toast.makeText(requireActivity(), error.message, Toast.LENGTH_SHORT).show();
+                        });
+            }
+        });
     }
 }
