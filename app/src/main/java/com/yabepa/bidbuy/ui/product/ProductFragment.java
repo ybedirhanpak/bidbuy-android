@@ -1,6 +1,7 @@
 package com.yabepa.bidbuy.ui.product;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -28,6 +29,7 @@ public class ProductFragment extends Fragment {
     private int productID = 0;
 
     private FragmentProductBinding binding;
+    private SharedPreferences sharedPref;
 
     ArrayList<IPreviewItem> previewList = new ArrayList<>();
     PreviewListAdapter adapter;
@@ -63,8 +65,9 @@ public class ProductFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         ProductViewModel viewModel = new ViewModelProvider(this).get(ProductViewModel.class);
         viewModel.getProduct().observe(requireActivity(), product -> {
             // Update product

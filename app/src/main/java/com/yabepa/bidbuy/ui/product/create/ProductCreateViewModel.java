@@ -1,5 +1,6 @@
 package com.yabepa.bidbuy.ui.product.create;
 
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.yabepa.bidbuy.data.Product;
@@ -8,12 +9,14 @@ import com.yabepa.bidbuy.network.Client;
 
 public class ProductCreateViewModel extends ViewModel {
 
-    public void createProduct(String name, double minPrice, String imageURL) {
+    public MutableLiveData<Product> createdProduct = new MutableLiveData<>(null);
 
-        ProductCreate productCreate = new ProductCreate(name, minPrice, 1, imageURL);
+    public void createProduct(String name, double minPrice, int ownerId, String imageURL) {
+
+        ProductCreate productCreate = new ProductCreate(name, minPrice, ownerId, imageURL);
 
         Client.<Product>sendRequest("createProduct", productCreate, Product.class, false,
-                System.out::println,
+                product -> createdProduct.setValue(product),
                 System.out::println);
     }
 }
