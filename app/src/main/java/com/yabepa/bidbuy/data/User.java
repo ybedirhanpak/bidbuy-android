@@ -5,6 +5,9 @@ public class User {
     public String username;
     public int passwordHash;
 
+    public User() {
+    }
+
     public User(int id, String username, int passwordHash) {
         this.id = id;
         this.username = username;

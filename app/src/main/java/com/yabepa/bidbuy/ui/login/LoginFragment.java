@@ -2,23 +2,31 @@ package com.yabepa.bidbuy.ui.login;
 
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.yabepa.bidbuy.R;
 import com.yabepa.bidbuy.databinding.LoginFragmentBinding;
+
+import java.util.Objects;
 
 public class LoginFragment extends Fragment {
 
     private LoginViewModel viewModel;
     private LoginFragmentBinding binding;
+    private SharedPreferences sharedPref;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -28,20 +36,43 @@ public class LoginFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-    }
-
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.buttonLogin.setOnClickListener(buttonView -> {
-            String username = binding.editTextUsername.getText().toString();
-            String password = binding.editTextPassword.getText().toString();
+        viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE);
 
-            viewModel.login(username, password);
+        String username = sharedPref.getString("username", "");
+        int userId = sharedPref.getInt("userId", -1);
+
+        if (!username.equals("") || userId != -1) {
+            // There is already a user logged in
+            Navigation.findNavController(view).navigateUp();
+            Toast.makeText(requireActivity(), "There is already a user logged in: " + username, Toast.LENGTH_SHORT).show();
+        }
+
+        viewModel.getUser().observe(requireActivity(), user -> {
+            if (user != null) {
+                // A user is logged in
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("username", user.username);
+                editor.putInt("userId", user.id);
+                editor.apply();
+                // Navigate back
+                Navigation.findNavController(view).navigateUp();
+                Toast.makeText(requireActivity(), "Logged in successfully: " + user.username, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        binding.buttonLogin.setOnClickListener(buttonView -> {
+            String usernameInput = binding.editTextUsername.getText().toString();
+            String passwordInput = binding.editTextPassword.getText().toString();
+
+            viewModel.login(usernameInput, passwordInput);
+
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(getString(R.string.username), "test");
+            editor.apply();
         });
     }
 }

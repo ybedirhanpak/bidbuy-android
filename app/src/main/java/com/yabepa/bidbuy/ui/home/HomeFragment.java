@@ -1,5 +1,7 @@
 package com.yabepa.bidbuy.ui.home;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,6 +12,7 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.yabepa.bidbuy.R;
 import com.yabepa.bidbuy.databinding.FragmentHomeBinding;
@@ -17,6 +20,7 @@ import com.yabepa.bidbuy.databinding.FragmentHomeBinding;
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
+    private SharedPreferences sharedPref;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -29,6 +33,8 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE);
+
         binding.buttonNavigateProductList.setOnClickListener(buttonView ->
                 Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_productListFragment));
 
@@ -40,6 +46,14 @@ public class HomeFragment extends Fragment {
 
         binding.buttonNavigateProductCreate.setOnClickListener(buttonView ->
                 Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_productCreateFragment));
+
+        binding.buttonLogout.setOnClickListener(buttonView -> {
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.remove("username");
+            editor.remove("userId");
+            editor.apply();
+            Toast.makeText(requireActivity(), "Logged out successfully", Toast.LENGTH_SHORT).show();
+        });
     }
 
     @Override
