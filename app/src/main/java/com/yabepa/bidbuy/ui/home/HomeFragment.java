@@ -49,8 +49,8 @@ public class HomeFragment extends Fragment {
 
         binding.buttonLogout.setOnClickListener(buttonView -> {
             SharedPreferences.Editor editor = sharedPref.edit();
-            editor.remove("username");
-            editor.remove("userId");
+            editor.remove(getString(R.string.sp_username));
+            editor.remove(getString(R.string.sp_userId));
             editor.apply();
             Toast.makeText(requireActivity(), "Logged out successfully", Toast.LENGTH_SHORT).show();
         });

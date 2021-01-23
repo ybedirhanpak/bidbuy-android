@@ -16,4 +16,7 @@
     <string name="deadline">Deadline</string>
     <string name="image">Image</string>
     <string name="create">Create</string>
+    <!--  Shared Preferences  -->
+    <string name="sp_username">username</string>
+    <string name="sp_userId">userId</string>
 </resources>

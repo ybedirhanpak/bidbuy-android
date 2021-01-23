@@ -9,7 +9,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
@@ -20,7 +19,6 @@ import android.widget.Toast;
 import com.yabepa.bidbuy.R;
 import com.yabepa.bidbuy.databinding.LoginFragmentBinding;
 
-import java.util.Objects;
 
 public class LoginFragment extends Fragment {
 
@@ -42,8 +40,8 @@ public class LoginFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE);
 
-        String username = sharedPref.getString("username", "");
-        int userId = sharedPref.getInt("userId", -1);
+        String username = sharedPref.getString(getString(R.string.sp_username), "");
+        int userId = sharedPref.getInt(getString(R.string.sp_userId), -1);
 
         if (!username.equals("") || userId != -1) {
             // There is already a user logged in
@@ -55,8 +53,8 @@ public class LoginFragment extends Fragment {
             if (user != null) {
                 // A user is logged in
                 SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString("username", user.username);
-                editor.putInt("userId", user.id);
+                editor.putString(getString(R.string.sp_username), user.username);
+                editor.putInt(getString(R.string.sp_userId), user.id);
                 editor.apply();
                 // Navigate back
                 Navigation.findNavController(view).navigateUp();
@@ -69,10 +67,6 @@ public class LoginFragment extends Fragment {
             String passwordInput = binding.editTextPassword.getText().toString();
 
             viewModel.login(usernameInput, passwordInput);
-
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString(getString(R.string.username), "test");
-            editor.apply();
         });
     }
 }

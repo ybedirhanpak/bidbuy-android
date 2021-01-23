@@ -23,7 +23,6 @@ public class RegisterFragment extends Fragment {
 
     private RegisterViewModel viewModel;
     private RegisterFragmentBinding binding;
-    private SharedPreferences sharedPref;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -36,12 +35,12 @@ public class RegisterFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE);
         viewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
 
         // Check if there is already a user logged in
-        String username = sharedPref.getString("username", "");
-        int userId = sharedPref.getInt("userId", -1);
+        String username = sharedPref.getString(getString(R.string.sp_username), "");
+        int userId = sharedPref.getInt(getString(R.string.sp_userId), -1);
 
         if (!username.equals("") || userId != -1) {
             // There is already a user logged in
