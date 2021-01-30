@@ -18,6 +18,11 @@
     <string name="create">Create</string>
     <string name="give_bid">Give Bid</string>
     <string name="bid">Bid</string>
+    <string name="plus_one">+ ₺1</string>
+    <string name="plus_five">+ ₺5</string>
+    <string name="plus_ten">+ ₺10</string>
+    <string name="last_bids">Last Bids</string>
+    <string name="tl">₺</string>
     <!--  Shared Preferences  -->
     <string name="sp_username">username</string>
     <string name="sp_userId">userId</string>

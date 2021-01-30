@@ -22,6 +22,12 @@ public class ProductViewModel extends ViewModel {
         return product;
     }
 
+    public void updateProductPrice(double price) {
+        Product product = getProduct().getValue();
+        product.price = price;
+        getProduct().setValue(new Product(product));
+    }
+
     public void fetchProduct(int productId) {
         Retrieve retrieveBody = new Retrieve(productId);
         Client.<Product>sendRequest("getProduct", retrieveBody, Product.class, false,
@@ -29,9 +35,9 @@ public class ProductViewModel extends ViewModel {
                 System.out::println);
     }
 
-    public void giveBid(int productId, int userId, double bid,
+    public void giveBid(int userId, int productId, double bid,
                         Callback.Success<Bid> success, Callback.Error<Message> error) {
-        BidCreate bidCreate = new BidCreate(productId, userId, bid);
+        BidCreate bidCreate = new BidCreate(userId, productId, bid);
         Client.sendRequest("createBid", bidCreate, Bid.class, false,
                 success, error);
     }

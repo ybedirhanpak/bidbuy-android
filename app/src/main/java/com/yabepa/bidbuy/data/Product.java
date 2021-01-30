@@ -44,7 +44,7 @@ public class Product {
     }
 
     public String getPriceString() {
-        return Double.toString(this.price);
+        return "₺ " + this.price;
     }
 
     public String getDeadlineString() {

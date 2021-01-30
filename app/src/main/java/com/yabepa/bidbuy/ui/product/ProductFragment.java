@@ -8,8 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,9 +18,10 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.yabepa.bidbuy.R;
-import com.yabepa.bidbuy.data.IPreviewItem;
+import com.yabepa.bidbuy.data.Bid;
+import com.yabepa.bidbuy.data.Product;
 import com.yabepa.bidbuy.databinding.FragmentProductBinding;
-import com.yabepa.bidbuy.ui.common.PreviewListAdapter;
+import com.yabepa.bidbuy.ui.bid.BidAdapter;
 
 import java.util.ArrayList;
 
@@ -32,10 +31,10 @@ public class ProductFragment extends Fragment {
     private int productID = 0;
 
     private FragmentProductBinding binding;
-    private SharedPreferences sharedPref;
+    private ProductViewModel viewModel;
 
-    ArrayList<IPreviewItem> previewList = new ArrayList<>();
-    PreviewListAdapter adapter;
+    ArrayList<Bid> bidList = new ArrayList<>();
+    BidAdapter bidListAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,18 +51,12 @@ public class ProductFragment extends Fragment {
         binding = FragmentProductBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        int mColumnCount = 2;
+        // Configure Last Bids
         Context context = view.getContext();
-        RecyclerView recyclerView = binding.productPreviewList;
-
-        if (mColumnCount <= 1) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        } else {
-            recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-        }
-        adapter = new PreviewListAdapter(previewList);
-        recyclerView.setAdapter(adapter);
-
+        RecyclerView recyclerView = binding.recyclerViewLastBids;
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        bidListAdapter = new BidAdapter(bidList);
+        recyclerView.setAdapter(bidListAdapter);
         return view;
     }
 
@@ -71,8 +64,8 @@ public class ProductFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ProductViewModel viewModel = new ViewModelProvider(this).get(ProductViewModel.class);
-        sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE);
+        viewModel = new ViewModelProvider(this).get(ProductViewModel.class);
+        SharedPreferences sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE);
 
         // Get logged in user
         String username = sharedPref.getString(getString(R.string.sp_username), "");
@@ -82,10 +75,7 @@ public class ProductFragment extends Fragment {
         viewModel.getProduct().observe(requireActivity(), product -> {
             // Update product
             binding.setProduct(product);
-            // Update preview list
-            this.previewList.clear();
-            this.previewList.addAll(product.generatePreviewList());
-            this.adapter.notifyDataSetChanged();
+
             // Update product image
             if (product.imageURL != null && !product.imageURL.equals("")) {
                 Picasso.get().load(product.imageURL).into(binding.productImage);
@@ -101,13 +91,33 @@ public class ProductFragment extends Fragment {
                 Toast.makeText(requireActivity(), "You need to log in first", Toast.LENGTH_SHORT).show();
             } else {
                 double bid = Double.parseDouble(binding.editTextBid.getText().toString());
-                viewModel.giveBid(productID, userId, bid,
+                viewModel.giveBid(userId, productID, bid,
                         bidCreated -> {
                             Toast.makeText(requireActivity(), "Bid is created: " + bidCreated.price, Toast.LENGTH_SHORT).show();
-                        }, error -> {
-                            Toast.makeText(requireActivity(), error.message, Toast.LENGTH_SHORT).show();
-                        });
+                            addBidToList(bidCreated);
+                            // Update product
+                            viewModel.updateProductPrice(bidCreated.price);
+                            // Reset editText
+                            binding.editTextBid.setText("");
+                        }, error -> Toast.makeText(requireActivity(), error.message, Toast.LENGTH_SHORT).show());
             }
         });
+
+        binding.buttonPlusOne.setOnClickListener(buttonView -> increaseBidText(1));
+
+        binding.buttonPlusFive.setOnClickListener(buttonView -> increaseBidText(5));
+
+        binding.buttonPlusTen.setOnClickListener(buttonView -> increaseBidText(10));
+    }
+
+    private void addBidToList(Bid bid) {
+        bidList.add(bid);
+        bidListAdapter.notifyDataSetChanged();
+    }
+
+    private void increaseBidText(double increaseAmount) {
+        Product currentProduct = viewModel.getProduct().getValue();
+        String price = "" + (currentProduct.price + increaseAmount);
+        binding.editTextBid.setText(price);
     }
 }
