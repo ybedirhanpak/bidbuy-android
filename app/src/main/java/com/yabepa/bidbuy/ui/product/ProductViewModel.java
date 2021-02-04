@@ -22,17 +22,14 @@ public class ProductViewModel extends ViewModel {
         return product;
     }
 
-    public void updateProductPrice(double price) {
-        Product product = getProduct().getValue();
-        product.price = price;
-        getProduct().setValue(new Product(product));
+    public void fetchProduct(int productId, Callback.Success<Product> success, Callback.Error<Message> error) {
+        Retrieve retrieveBody = new Retrieve(productId);
+        Client.sendContinuousRequest("getProduct", retrieveBody, Product.class, false,
+                success, error);
     }
 
-    public void fetchProduct(int productId) {
-        Retrieve retrieveBody = new Retrieve(productId);
-        Client.<Product>sendRequest("getProduct", retrieveBody, Product.class, false,
-                payload -> getProduct().setValue(payload),
-                System.out::println);
+    public void stopFetchProduct(int productId) {
+        Client.stopContinuousRequest("getProduct");
     }
 
     public void giveBid(int userId, int productId, double bid,

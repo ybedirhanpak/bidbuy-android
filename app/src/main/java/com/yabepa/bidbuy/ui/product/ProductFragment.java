@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -83,7 +84,12 @@ public class ProductFragment extends Fragment {
         });
 
         // Fetch product from server
-        viewModel.fetchProduct(productID);
+        viewModel.fetchProduct(productID,
+                product -> viewModel.getProduct().setValue(product),
+                error -> {
+                    Navigation.findNavController(requireView()).navigateUp();
+                    Toast.makeText(requireActivity(), error.message, Toast.LENGTH_SHORT).show();
+                });
 
         binding.buttonGiveBid.setOnClickListener(buttonView -> {
             if (username.equals("") && userId == -1) {
@@ -95,8 +101,6 @@ public class ProductFragment extends Fragment {
                         bidCreated -> {
                             Toast.makeText(requireActivity(), "Bid is created: " + bidCreated.price, Toast.LENGTH_SHORT).show();
                             addBidToList(bidCreated);
-                            // Update product
-                            viewModel.updateProductPrice(bidCreated.price);
                             // Reset editText
                             binding.editTextBid.setText("");
                         }, error -> Toast.makeText(requireActivity(), error.message, Toast.LENGTH_SHORT).show());
@@ -108,6 +112,12 @@ public class ProductFragment extends Fragment {
         binding.buttonPlusFive.setOnClickListener(buttonView -> increaseBidText(5));
 
         binding.buttonPlusTen.setOnClickListener(buttonView -> increaseBidText(10));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        viewModel.stopFetchProduct(productID);
     }
 
     private void addBidToList(Bid bid) {
