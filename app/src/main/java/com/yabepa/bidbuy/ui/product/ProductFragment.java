@@ -97,9 +97,13 @@ public class ProductFragment extends Fragment {
                 });
 
         binding.buttonGiveBid.setOnClickListener(buttonView -> {
+            String bidText = binding.editTextBid.getText().toString();
             if (username.equals("") && userId == -1) {
                 // There is already a user logged in
-                Toast.makeText(requireActivity(), "You need to log in first", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireActivity(), "You need to log in first.", Toast.LENGTH_SHORT).show();
+            } else if(bidText == null || bidText.equals("")) {
+                // There is already a user logged in
+                Toast.makeText(requireActivity(), "Please enter a bid.", Toast.LENGTH_SHORT).show();
             } else {
                 double bid = Double.parseDouble(binding.editTextBid.getText().toString());
                 viewModel.giveBid(userId, productID, bid,
