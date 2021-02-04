@@ -9,7 +9,15 @@
         android:id="@+id/productFragment"
         android:name="com.yabepa.bidbuy.ui.product.ProductFragment"
         android:label="Product"
-        tools:layout="@layout/fragment_product" />
+        tools:layout="@layout/fragment_product" >
+        <action
+            android:id="@+id/action_productFragment_to_bidFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:destination="@id/bidFragment" />
+    </fragment>
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.yabepa.bidbuy.ui.home.HomeFragment"
@@ -78,5 +86,10 @@
         android:name="com.yabepa.bidbuy.ui.product.create.ProductCreateFragment"
         android:label="Product Create"
         tools:layout="@layout/product_create_fragment" />
+    <fragment
+        android:id="@+id/bidFragment"
+        android:name="com.yabepa.bidbuy.ui.bid.list.BidListFragment"
+        android:label="Bid List"
+        tools:layout="@layout/fragment_bid_list" />
 
 </navigation>

@@ -22,7 +22,7 @@ import com.yabepa.bidbuy.R;
 import com.yabepa.bidbuy.data.Bid;
 import com.yabepa.bidbuy.data.Product;
 import com.yabepa.bidbuy.databinding.FragmentProductBinding;
-import com.yabepa.bidbuy.ui.bid.BidAdapter;
+import com.yabepa.bidbuy.ui.bid.BidListAdapter;
 
 import java.util.ArrayList;
 
@@ -35,7 +35,7 @@ public class ProductFragment extends Fragment {
     private ProductViewModel viewModel;
 
     ArrayList<Bid> bidList = new ArrayList<>();
-    BidAdapter bidListAdapter;
+    BidListAdapter bidListAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,7 +56,7 @@ public class ProductFragment extends Fragment {
         Context context = view.getContext();
         RecyclerView recyclerView = binding.recyclerViewLastBids;
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        bidListAdapter = new BidAdapter(bidList);
+        bidListAdapter = new BidListAdapter(bidList);
         recyclerView.setAdapter(bidListAdapter);
         return view;
     }
@@ -112,6 +112,12 @@ public class ProductFragment extends Fragment {
         binding.buttonPlusFive.setOnClickListener(buttonView -> increaseBidText(5));
 
         binding.buttonPlusTen.setOnClickListener(buttonView -> increaseBidText(10));
+
+        binding.textViewSeeAll.setOnClickListener(textView -> {
+            Bundle bundle = new Bundle();
+            bundle.putInt("productID", productID);
+            Navigation.findNavController(requireView()).navigate(R.id.action_productFragment_to_bidFragment, bundle);
+        });
     }
 
     @Override

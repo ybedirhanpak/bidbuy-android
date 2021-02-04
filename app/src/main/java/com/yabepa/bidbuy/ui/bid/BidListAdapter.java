@@ -13,11 +13,11 @@ import com.yabepa.bidbuy.data.Bid;
 
 import java.util.List;
 
-public class BidAdapter extends RecyclerView.Adapter<BidAdapter.ViewHolder> {
+public class BidListAdapter extends RecyclerView.Adapter<BidListAdapter.ViewHolder> {
 
     private final List<Bid> mValues;
 
-    public BidAdapter(List<Bid> items) {
+    public BidListAdapter(List<Bid> items) {
         mValues = items;
     }
 
