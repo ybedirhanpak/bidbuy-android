@@ -89,12 +89,13 @@ public class Client {
     public static <T> void sendContinuousRequest(
             String identifier,
             Object body,
+            int subscriptionSubject,
             Class<?> responseClass,
             boolean isList,
             Callback.Success<T> success,
             Callback.Error<Message> error
     ) {
-        Request request = new Request(identifier, body, true);
+        Request request = new Request(identifier, body, subscriptionSubject);
         new Thread(() -> {
             try {
                 subscriptions.put(identifier, true);

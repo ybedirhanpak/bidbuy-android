@@ -24,7 +24,7 @@ public class ProductViewModel extends ViewModel {
 
     public void fetchProduct(int productId, Callback.Success<Product> success, Callback.Error<Message> error) {
         Retrieve retrieveBody = new Retrieve(productId);
-        Client.sendContinuousRequest("getProduct", retrieveBody, Product.class, false,
+        Client.sendContinuousRequest("getProduct", retrieveBody, productId,  Product.class, false,
                 success, error);
     }
 
