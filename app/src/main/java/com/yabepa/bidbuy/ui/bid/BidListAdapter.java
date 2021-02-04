@@ -54,8 +54,10 @@ public class BidListAdapter extends RecyclerView.Adapter<BidListAdapter.ViewHold
         }
 
         public void bind(Bid item) {
-            String ownerId = "" + item.fromUserId;
-            bidOwner.setText(ownerId);
+            if(item.fromUser != null) {
+                String ownerId = "" + item.fromUser.username;
+                bidOwner.setText(ownerId);
+            }
             String price = "₺" + item.price;
             bidPrice.setText(price);
             bidDate.setText(item.createDate);
