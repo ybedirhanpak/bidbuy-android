@@ -26,7 +26,7 @@ public class Client {
 
     private static final Gson gson = new Gson();
 
-    private static final HashMap<String, Boolean> subscriptions = new HashMap<>();
+    private static final HashMap<String, Socket> subscriptions = new HashMap<>();
 
     private static <T> Type getResponseType(Class<T> className, boolean isList) {
         if (isList) {
@@ -98,8 +98,8 @@ public class Client {
         Request request = new Request(identifier, body, subscriptionSubject);
         new Thread(() -> {
             try {
-                subscriptions.put(identifier, true);
                 Socket clientSocket = new Socket(SERVER_IP, SERVER_PORT);
+                subscriptions.put(identifier, clientSocket);
 
                 // Send request
                 String requestJson = gson.toJson(request);
@@ -109,7 +109,7 @@ public class Client {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
                 // Read as long as you want to get response from server
-                while (subscriptions.get(identifier) != null && subscriptions.get(identifier)) {
+                while (subscriptions.get(identifier) != null) {
                     String responseJson = reader.readLine();
                     if (responseJson != null) {
                         handleResponseJson(responseJson, responseClass, isList, success, error);
@@ -126,6 +126,15 @@ public class Client {
     }
 
     public static void stopContinuousRequest(String identifier) {
+        try {
+            Socket socket = subscriptions.get(identifier);
+            if(socket != null) {
+                socket.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         subscriptions.remove(identifier);
     }
 }

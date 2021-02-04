@@ -85,7 +85,12 @@ public class ProductFragment extends Fragment {
 
         // Fetch product from server
         viewModel.fetchProduct(productID,
-                product -> viewModel.getProduct().setValue(product),
+                product -> {
+                    viewModel.getProduct().setValue(product);
+                    if(product.lastBid != null) {
+                        addBidToList(product.lastBid);
+                    }
+                },
                 error -> {
                     Navigation.findNavController(requireView()).navigateUp();
                     Toast.makeText(requireActivity(), error.message, Toast.LENGTH_SHORT).show();
@@ -100,7 +105,6 @@ public class ProductFragment extends Fragment {
                 viewModel.giveBid(userId, productID, bid,
                         bidCreated -> {
                             Toast.makeText(requireActivity(), "Bid is created: " + bidCreated.price, Toast.LENGTH_SHORT).show();
-                            addBidToList(bidCreated);
                             // Reset editText
                             binding.editTextBid.setText("");
                         }, error -> Toast.makeText(requireActivity(), error.message, Toast.LENGTH_SHORT).show());
@@ -118,6 +122,14 @@ public class ProductFragment extends Fragment {
             bundle.putInt("productID", productID);
             Navigation.findNavController(requireView()).navigate(R.id.action_productFragment_to_bidFragment, bundle);
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        bidList.clear();
+        bidListAdapter.notifyDataSetChanged();
+        viewModel.stopFetchProduct(productID);
     }
 
     @Override
