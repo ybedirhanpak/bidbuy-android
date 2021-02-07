@@ -67,7 +67,11 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             String price = "₺" + product.price;
             textViewPrice.setText(price);
             if (product.imageURL != null && !product.imageURL.equals("")) {
-                Picasso.get().load(product.imageURL).into(imageView);
+                String url = product.imageURL;
+                if(url.endsWith("/")) {
+                    url = url.substring(0, url.length()-1);
+                }
+                Picasso.get().load(url).into(imageView);
             }
             mView.setOnClickListener(view -> {
                 Bundle bundle = new Bundle();
