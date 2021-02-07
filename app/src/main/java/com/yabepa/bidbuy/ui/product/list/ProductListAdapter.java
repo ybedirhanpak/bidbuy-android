@@ -72,6 +72,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                     url = url.substring(0, url.length()-1);
                 }
                 Picasso.get().load(url).into(imageView);
+            } else {
+                imageView.setBackgroundResource(R.drawable.ic_image);
             }
             mView.setOnClickListener(view -> {
                 Bundle bundle = new Bundle();
