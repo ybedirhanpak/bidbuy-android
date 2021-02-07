@@ -25,7 +25,10 @@ public class Product {
     }
 
     public String getOwnerString() {
-        return Integer.toString(this.owner.id);
+        if(this.owner != null && this.owner.username != null) {
+            return this.owner.username;
+        }
+        return "";
     }
 
     public String getLastBidString() {

@@ -1,43 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="@dimen/padding_sm"
-    android:orientation="horizontal">
-
-    <ImageView
-        android:id="@+id/product_image"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        android:contentDescription="@string/product_image"/>
+    android:layout_height="180dp"
+    android:layout_margin="@dimen/margin_md"
+    android:clickable="true"
+    android:focusable="true">
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/padding_md"
-        android:orientation="vertical">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_sm">
 
-        <TextView
-            android:id="@+id/product_number"
-            android:layout_width="wrap_content"
+        <ImageView
+            android:id="@+id/product_image"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:contentDescription="@string/product_image" />
+
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/margin_sm"
-            android:textAppearance="?attr/textAppearanceListItem" />
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_md">
 
-        <TextView
-            android:id="@+id/product_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_sm"
-            android:textAppearance="?attr/textAppearanceListItem" />
+            <TextView
+                android:id="@+id/product_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_sm"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_md" />
 
-        <TextView
-            android:id="@+id/product_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?attr/textAppearanceListItem" />
+            <TextView
+                android:id="@+id/product_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_md"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textColor="@color/primaryDarkColor"
+                android:textSize="@dimen/text_md" />
 
+            <TextView
+                android:id="@+id/product_owner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_sm"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textColor="@color/secondaryLightColor"
+                android:textSize="@dimen/text_md" />
+
+        </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -47,7 +47,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView textViewId;
+        public final TextView textViewOwner;
         public final TextView textViewName;
         public final TextView textViewPrice;
         public final ImageView imageView;
@@ -55,14 +55,14 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            textViewId = view.findViewById(R.id.product_number);
             textViewName = view.findViewById(R.id.product_name);
             textViewPrice = view.findViewById(R.id.product_price);
+            textViewOwner = view.findViewById(R.id.product_owner);
             imageView = view.findViewById(R.id.product_image);
         }
 
         public void bind(Product product) {
-            textViewId.setText(product.getIdString());
+            textViewOwner.setText(product.getOwnerString());
             textViewName.setText(product.name);
             String price = "₺" + product.price;
             textViewPrice.setText(price);

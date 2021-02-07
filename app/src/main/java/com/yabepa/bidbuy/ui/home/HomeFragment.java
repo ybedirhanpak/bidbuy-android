@@ -35,6 +35,22 @@ public class HomeFragment extends Fragment {
 
         sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE);
 
+        String username = sharedPref.getString(getString(R.string.sp_username), "");
+        int userId = sharedPref.getInt(getString(R.string.sp_userId), -1);
+
+        if (!username.equals("") || userId != -1) {
+            // There is already a user logged in
+            binding.buttonLogout.setVisibility(View.VISIBLE);
+            binding.layoutAfterLogin.setVisibility(View.VISIBLE);
+            binding.layoutBeforeLogin.setVisibility(View.GONE);
+        } else {
+            // There is no user
+            binding.buttonLogout.setVisibility(View.GONE);
+            binding.layoutAfterLogin.setVisibility(View.GONE);
+            binding.layoutBeforeLogin.setVisibility(View.VISIBLE);
+        }
+
+
         binding.buttonNavigateProductList.setOnClickListener(buttonView ->
                 Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_productListFragment));
 

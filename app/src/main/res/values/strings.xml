@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">bidbuy</string>
+    <!--  Home  -->
     <string name="go_to_product_list">Go to product list</string>
-    <string name="increase">Increase</string>
+    <string name="bidbuy_logo">BidBuy Logo</string>
     <!--  Login/Register Pages  -->
     <string name="username">Username</string>
     <string name="password">Password</string>

@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_md"
-        android:textColor="@color/purple_500"
+        android:textColor="@color/primaryColor"
         android:layout_marginBottom="@dimen/margin_sm"/>
 
     <TextView
@@ -25,5 +25,5 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/purple_200"/>
+        android:background="@color/primaryLightColor"/>
 </LinearLayout>

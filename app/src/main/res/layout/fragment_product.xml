@@ -18,12 +18,19 @@
         android:padding="@dimen/padding_md"
         tools:context=".ui.product.ProductFragment">
 
-        <ImageView
-            android:id="@+id/product_image"
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:contentDescription="@string/product_image"
-            android:src="@drawable/ic_launcher_background" />
+            android:layout_height="160dp">
+
+            <ImageView
+                android:id="@+id/product_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/product_image"
+                android:src="@drawable/ic_image" />
+
+        </com.google.android.material.card.MaterialCardView>
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -80,7 +87,7 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_md"
@@ -88,31 +95,49 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_sm"
-                android:layout_marginRight="@dimen/margin_sm"
+                android:layout_gravity="center"
                 android:text="@string/tl"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_md" />
+                android:textSize="@dimen/text_lg"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <EditText
-                android:id="@+id/edit_text_bid"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_md"
-                android:layout_marginRight="@dimen/margin_md"
+                android:layout_marginHorizontal="@dimen/margin_sm"
                 android:layout_weight="1"
-                android:autofillHints="@string/bid"
                 android:hint="@string/bid"
-                android:inputType="numberDecimal" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/button_give_bid"
+                app:layout_constraintStart_toEndOf="@+id/textView"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_bid"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:autofillHints="@string/bid"
+                    android:inputType="numberDecimal"
+                    android:textSize="@dimen/text_md" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/button_give_bid"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/give_bid" />
-        </LinearLayout>
+                android:layout_gravity="center"
+                android:text="@string/give_bid"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <View
             android:layout_width="match_parent"
@@ -138,7 +163,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/last_bids"
-                    android:textColor="@color/purple_700"
+                    android:textColor="@color/primaryDarkColor"
                     android:textSize="@dimen/text_md"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -149,7 +174,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/see_all"
-                    android:textColor="@color/purple_700"
+                    android:textColor="@color/primaryDarkColor"
                     android:textSize="@dimen/text_md"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
