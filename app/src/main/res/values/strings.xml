@@ -16,6 +16,7 @@
     <string name="min_price">Minimum Price</string>
     <string name="deadline">Deadline</string>
     <string name="image">Image</string>
+    <string name="image_url">Image URL</string>
     <string name="create">Create</string>
     <string name="give_bid">Give Bid</string>
     <string name="bid">Bid</string>

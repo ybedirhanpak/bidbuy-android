@@ -52,6 +52,7 @@ public class ProductCreateFragment extends Fragment {
         binding.buttonProductCreate.setOnClickListener(buttonView -> {
             Editable nameEditable = binding.productName.getText();
             Editable minPriceEditable = binding.productMinPrice.getText();
+            Editable imageEditable = binding.productImage.getText();
 
             if (nameEditable == null) {
                 Snackbar.make(view, "Please enter name", Snackbar.LENGTH_SHORT).show();
@@ -78,9 +79,15 @@ public class ProductCreateFragment extends Fragment {
             }
 
             double minPrice = Double.parseDouble(priceInput);
-            String image = "https://productimages.hepsiburada.net/s/49/1100/10986386784306.jpg";
 
-            viewModel.createProduct(name, minPrice, userId, image);
+            if (imageEditable == null) {
+                Snackbar.make(view, "No image edit field", Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+
+            String imageInput = imageEditable.toString();
+
+            viewModel.createProduct(name, minPrice, userId, imageInput);
         });
 
         // Observe to created product and navigate back
