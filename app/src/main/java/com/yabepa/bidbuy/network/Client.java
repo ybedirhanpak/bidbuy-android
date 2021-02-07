@@ -21,7 +21,7 @@ import com.yabepa.bidbuy.dto.Message;
 
 public class Client {
 
-    private static final String SERVER_IP = "35.241.171.0";
+    private static final String SERVER_IP = "35.187.78.77";
     private static final int SERVER_PORT = 9000;
 
     private static final Gson gson = new Gson();
