@@ -25,6 +25,11 @@
     <string name="last_bids">Last Bids</string>
     <string name="see_all">See All</string>
     <string name="tl">₺</string>
+    <string name="product_owner">Product owner:</string>
+    <!--  Bid  -->
+    <string name="date">Date</string>
+    <string name="owner">Owner</string>
+    <string name="price">Price</string>
     <!--  Shared Preferences  -->
     <string name="sp_username">username</string>
     <string name="sp_userId">userId</string>

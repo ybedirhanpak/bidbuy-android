@@ -11,11 +11,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.yabepa.bidbuy.R;
 import com.yabepa.bidbuy.databinding.RegisterFragmentBinding;
 
@@ -45,22 +46,39 @@ public class RegisterFragment extends Fragment {
         if (!username.equals("") || userId != -1) {
             // There is already a user logged in
             Navigation.findNavController(view).navigateUp();
-            Toast.makeText(requireActivity(), "There is already a user logged in: " + username, Toast.LENGTH_SHORT).show();
+            Snackbar.make(view, "There is already a user logged in: " + username, Snackbar.LENGTH_SHORT).show();
         }
 
-        // Observe if registration is successful
-        viewModel.registerSuccessful.observe(requireActivity(), successful -> {
-            if(successful) {
-                Navigation.findNavController(view).navigateUp();
-                Toast.makeText(requireActivity(), "Registration is successful", Toast.LENGTH_SHORT).show();
-            }
-        });
-
         binding.buttonRegister.setOnClickListener(buttonView -> {
-            String usernameInput = binding.editTextUsername.getText().toString();
-            String passwordInput = binding.editTextPassword.getText().toString();
+            Editable usernameEditText = binding.editTextUsername.getText();
+            Editable passwordEditText = binding.editTextPassword.getText();
 
-            viewModel.register(usernameInput, passwordInput);
+            if (usernameEditText == null || passwordEditText == null) {
+                Snackbar.make(view, "Please enter credentials", Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+
+            String usernameInput = usernameEditText.toString();
+            String passwordInput = passwordEditText.toString();
+
+            if (usernameInput.equals("")) {
+                Snackbar.make(view, "Please enter username", Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (passwordInput.equals("")) {
+                Snackbar.make(view, "Please enter password", Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+
+            viewModel.register(usernameInput, passwordInput,
+                    user -> {
+                        if (user != null) {
+                            Navigation.findNavController(view).navigateUp();
+                            Snackbar.make(view, "Registration is successful", Snackbar.LENGTH_SHORT).show();
+                        }
+                    },
+                    error -> Snackbar.make(view, error.message, Snackbar.LENGTH_SHORT).show());
         });
     }
 }

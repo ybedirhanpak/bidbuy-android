@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="180dp"
     android:layout_margin="@dimen/margin_md"
@@ -18,9 +19,9 @@
             android:layout_height="160dp"
             android:contentDescription="@string/product_image" />
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
             android:padding="@dimen/padding_md">
@@ -29,30 +30,37 @@
                 android:id="@+id/product_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_sm"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_md" />
-
-            <TextView
-                android:id="@+id/product_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_md"
-                android:textAppearance="?attr/textAppearanceListItem"
-                android:textColor="@color/primaryDarkColor"
-                android:textSize="@dimen/text_md" />
+                android:textStyle="bold"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/product_owner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_sm"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:textColor="@color/secondaryLightColor"
-                android:textSize="@dimen/text_md" />
+                android:textColor="@color/darkGray"
+                android:textSize="@dimen/text_md"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/product_name" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/product_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textColor="@color/primaryDarkColor"
+                android:textSize="@dimen/text_lg"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

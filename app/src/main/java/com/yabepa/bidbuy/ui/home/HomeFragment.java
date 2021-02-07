@@ -12,8 +12,8 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.yabepa.bidbuy.R;
 import com.yabepa.bidbuy.databinding.FragmentHomeBinding;
 
@@ -38,18 +38,7 @@ public class HomeFragment extends Fragment {
         String username = sharedPref.getString(getString(R.string.sp_username), "");
         int userId = sharedPref.getInt(getString(R.string.sp_userId), -1);
 
-        if (!username.equals("") || userId != -1) {
-            // There is already a user logged in
-            binding.buttonLogout.setVisibility(View.VISIBLE);
-            binding.layoutAfterLogin.setVisibility(View.VISIBLE);
-            binding.layoutBeforeLogin.setVisibility(View.GONE);
-        } else {
-            // There is no user
-            binding.buttonLogout.setVisibility(View.GONE);
-            binding.layoutAfterLogin.setVisibility(View.GONE);
-            binding.layoutBeforeLogin.setVisibility(View.VISIBLE);
-        }
-
+        updateUI(username, userId);
 
         binding.buttonNavigateProductList.setOnClickListener(buttonView ->
                 Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_productListFragment));
@@ -68,7 +57,8 @@ public class HomeFragment extends Fragment {
             editor.remove(getString(R.string.sp_username));
             editor.remove(getString(R.string.sp_userId));
             editor.apply();
-            Toast.makeText(requireActivity(), "Logged out successfully", Toast.LENGTH_SHORT).show();
+            updateUI("", -1);
+            Snackbar.make(view, "Logged out successfully", Snackbar.LENGTH_SHORT).show();
         });
     }
 
@@ -76,5 +66,19 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void updateUI (String username, int userId) {
+        if (!username.equals("") || userId != -1) {
+            // There is already a user logged in
+            binding.buttonLogout.setVisibility(View.VISIBLE);
+            binding.layoutAfterLogin.setVisibility(View.VISIBLE);
+            binding.layoutBeforeLogin.setVisibility(View.GONE);
+        } else {
+            // There is no user
+            binding.buttonLogout.setVisibility(View.GONE);
+            binding.layoutAfterLogin.setVisibility(View.GONE);
+            binding.layoutBeforeLogin.setVisibility(View.VISIBLE);
+        }
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -15,34 +15,70 @@
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:padding="@dimen/padding_md"
         tools:context=".ui.product.ProductFragment">
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="160dp">
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_md">
 
-            <ImageView
-                android:id="@+id/product_image"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:contentDescription="@string/product_image"
-                android:src="@drawable/ic_image" />
+                android:orientation="vertical"
+                android:padding="@dimen/padding_md">
+
+                <ImageView
+                    android:id="@+id/product_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:contentDescription="@string/product_image"
+                    android:src="@drawable/ic_image" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/margin_md"
+                    android:text="@{product.name}"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_md"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginEnd="@dimen/margin_md"
+                        android:layout_marginRight="@dimen/margin_md"
+                        android:text="@string/product_owner"
+                        android:textAppearance="?attr/textAppearanceListItem"
+                        android:textColor="@color/darkGray"
+                        android:textSize="@dimen/text_md"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:text="@{product.ownerString}"
+                        android:textAppearance="?attr/textAppearanceListItem"
+                        android:textColor="@color/darkGray"
+                        android:textSize="@dimen/text_md"/>
+                </LinearLayout>
+
+            </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/margin_md"
-            android:text="@{product.name}"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_md" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_md"
             android:layout_marginVertical="@dimen/margin_sm"
             android:gravity="center_horizontal"
             android:orientation="vertical">
@@ -52,47 +88,23 @@
                 android:layout_height="wrap_content"
                 android:text="@{product.priceString}"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_lg" />
+                android:textSize="@dimen/text_lg"
+                android:textStyle="bold" />
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="@dimen/margin_sm"
+            android:background="@color/gray" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/button_plus_one"
-                style="?android:buttonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_sm"
-                android:text="@string/plus_one" />
-
-            <Button
-                android:id="@+id/button_plus_five"
-                style="?android:buttonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_sm"
-                android:text="@string/plus_five" />
-
-            <Button
-                android:id="@+id/button_plus_ten"
-                style="?android:buttonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_sm"
-                android:text="@string/plus_ten" />
-
-        </LinearLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_md"
             android:layout_marginVertical="@dimen/margin_sm"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/padding_sm">
 
             <TextView
                 android:id="@+id/textView"
@@ -101,27 +113,20 @@
                 android:layout_gravity="center"
                 android:text="@string/tl"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_lg"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="@dimen/text_lg" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_sm"
-                android:layout_weight="1"
-                android:hint="@string/bid"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/button_give_bid"
-                app:layout_constraintStart_toEndOf="@+id/textView"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_marginHorizontal="@dimen/margin_md"
+                android:layout_weight="2"
+                android:hint="@string/bid">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edit_text_bid"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:autofillHints="@string/bid"
                     android:inputType="numberDecimal"
                     android:textSize="@dimen/text_md" />
@@ -130,14 +135,55 @@
 
             <Button
                 android:id="@+id/button_give_bid"
-                android:layout_width="wrap_content"
+                style="?android:buttonStyle"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/give_bid"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_weight="1"
+                android:text="@string/give_bid" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="@dimen/margin_sm"
+            android:background="@color/gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_md"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_plus_one"
+                style="?android:buttonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_sm"
+                android:layout_weight="1"
+                android:text="@string/plus_one" />
+
+            <Button
+                android:id="@+id/button_plus_five"
+                style="?android:buttonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_sm"
+                android:layout_weight="1"
+                android:text="@string/plus_five" />
+
+            <Button
+                android:id="@+id/button_plus_ten"
+                style="?android:buttonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_sm"
+                android:layout_weight="1"
+                android:text="@string/plus_ten" />
+
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
@@ -155,8 +201,9 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="@dimen/padding_md"
-                android:orientation="horizontal">
+                android:layout_marginHorizontal="@dimen/margin_md"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/padding_md">
 
                 <TextView
                     android:id="@+id/textViewLastBids"
@@ -176,6 +223,7 @@
                     android:text="@string/see_all"
                     android:textColor="@color/primaryDarkColor"
                     android:textSize="@dimen/text_md"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -184,7 +232,9 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_last_bids"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_md"
+                tools:listitem="@layout/fragment_bid_list_item" />
 
         </LinearLayout>
     </LinearLayout>

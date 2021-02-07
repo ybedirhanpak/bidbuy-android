@@ -11,11 +11,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.yabepa.bidbuy.R;
 import com.yabepa.bidbuy.databinding.LoginFragmentBinding;
 
@@ -46,27 +47,54 @@ public class LoginFragment extends Fragment {
         if (!username.equals("") || userId != -1) {
             // There is already a user logged in
             Navigation.findNavController(view).navigateUp();
-            Toast.makeText(requireActivity(), "There is already a user logged in: " + username, Toast.LENGTH_SHORT).show();
+            Snackbar.make(view, "There is already a user logged in: " + username, Snackbar.LENGTH_SHORT).show();
         }
 
-        viewModel.getUser().observe(requireActivity(), user -> {
-            if (user != null) {
-                // A user is logged in
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString(getString(R.string.sp_username), user.username);
-                editor.putInt(getString(R.string.sp_userId), user.id);
-                editor.apply();
-                // Navigate back
-                Navigation.findNavController(view).navigateUp();
-                Toast.makeText(requireActivity(), "Logged in successfully: " + user.username, Toast.LENGTH_SHORT).show();
-            }
-        });
-
         binding.buttonLogin.setOnClickListener(buttonView -> {
-            String usernameInput = binding.editTextUsername.getText().toString();
-            String passwordInput = binding.editTextPassword.getText().toString();
+            Editable usernameEditText = binding.editTextUsername.getText();
+            Editable passwordEditText = binding.editTextPassword.getText();
 
-            viewModel.login(usernameInput, passwordInput);
+            if (usernameEditText == null || passwordEditText == null) {
+                Snackbar.make(view, "Please enter credentials", Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+
+            String usernameInput = usernameEditText.toString();
+            String passwordInput = passwordEditText.toString();
+
+            if (usernameInput.equals("")) {
+                Snackbar.make(view, "Please enter username", Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (passwordInput.equals("")) {
+                Snackbar.make(view, "Please enter password", Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+
+            viewModel.login(usernameInput, passwordInput,
+                    user -> {
+                        if (user != null) {
+                            // A user is logged in
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            editor.putString(getString(R.string.sp_username), user.username);
+                            editor.putInt(getString(R.string.sp_userId), user.id);
+                            editor.apply();
+                            // Navigate back
+                            Navigation.findNavController(view).navigateUp();
+                            Snackbar.make(view, "Logged in successfully: " + user.username, Snackbar.LENGTH_SHORT).show();
+                        }
+                        resetForm();
+                    },
+                    error -> {
+                        Snackbar.make(view, error.message, Snackbar.LENGTH_SHORT).show();
+                        resetForm();
+                    });
         });
+    }
+
+    private void resetForm() {
+        binding.editTextUsername.setText("");
+        binding.editTextPassword.setText("");
     }
 }

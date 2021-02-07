@@ -11,11 +11,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.yabepa.bidbuy.R;
 import com.yabepa.bidbuy.databinding.ProductCreateFragmentBinding;
 
@@ -23,7 +24,6 @@ public class ProductCreateFragment extends Fragment {
 
     private ProductCreateViewModel viewModel;
     private ProductCreateFragmentBinding binding;
-    private SharedPreferences sharedPref;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -37,7 +37,7 @@ public class ProductCreateFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         viewModel = new ViewModelProvider(this).get(ProductCreateViewModel.class);
-        sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE);
 
         // If user is not logged in, navigate back
         String username = sharedPref.getString(getString(R.string.sp_username), "");
@@ -46,12 +46,38 @@ public class ProductCreateFragment extends Fragment {
         if (username.equals("") && userId == -1) {
             // There is no user logged in
             Navigation.findNavController(view).navigateUp();
-            Toast.makeText(requireActivity(), "Please log in first" + username, Toast.LENGTH_SHORT).show();
+            Snackbar.make(view, "Please log in first" + username, Snackbar.LENGTH_SHORT).show();
         }
 
         binding.buttonProductCreate.setOnClickListener(buttonView -> {
-            String name = binding.productName.getText().toString();
-            double minPrice = Double.parseDouble(binding.productMinPrice.getText().toString());
+            Editable nameEditable = binding.productName.getText();
+            Editable minPriceEditable = binding.productMinPrice.getText();
+
+            if (nameEditable == null) {
+                Snackbar.make(view, "Please enter name", Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+
+            String name = nameEditable.toString();
+
+            if (name.equals("")) {
+                Snackbar.make(view, "Please enter name", Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (minPriceEditable == null) {
+                Snackbar.make(view, "Please enter name", Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+
+            String priceInput = minPriceEditable.toString();
+
+            if (priceInput.equals("")) {
+                Snackbar.make(view, "Please enter name", Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+
+            double minPrice = Double.parseDouble(priceInput);
             String image = "https://productimages.hepsiburada.net/s/49/1100/10986386784306.jpg";
 
             viewModel.createProduct(name, minPrice, userId, image);
@@ -59,9 +85,9 @@ public class ProductCreateFragment extends Fragment {
 
         // Observe to created product and navigate back
         viewModel.createdProduct.observe(requireActivity(), product -> {
-            if(product != null) {
+            if (product != null) {
                 Navigation.findNavController(view).navigateUp();
-                Toast.makeText(requireActivity(), "Product is created successfully: " + product.name, Toast.LENGTH_SHORT).show();
+                Snackbar.make(view, "Product is created successfully: " + product.name, Snackbar.LENGTH_SHORT).show();
             }
         });
     }

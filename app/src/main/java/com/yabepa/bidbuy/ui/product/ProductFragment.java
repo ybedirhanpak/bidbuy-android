@@ -12,11 +12,12 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 import com.yabepa.bidbuy.R;
 import com.yabepa.bidbuy.data.Bid;
@@ -87,31 +88,40 @@ public class ProductFragment extends Fragment {
         viewModel.fetchProduct(productID,
                 product -> {
                     viewModel.getProduct().setValue(product);
-                    if(product.lastBid != null) {
+                    if (product.lastBid != null) {
                         addBidToList(product.lastBid);
                     }
                 },
                 error -> {
                     Navigation.findNavController(requireView()).navigateUp();
-                    Toast.makeText(requireActivity(), error.message, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(view, error.message, Snackbar.LENGTH_SHORT).show();
                 });
 
         binding.buttonGiveBid.setOnClickListener(buttonView -> {
-            String bidText = binding.editTextBid.getText().toString();
+            Editable bidEditText = binding.editTextBid.getText();
+
+            if (bidEditText == null) {
+                Snackbar.make(view, "Please enter a bid.", Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+
+            String bidText = bidEditText.toString();
+
             if (username.equals("") && userId == -1) {
                 // There is already a user logged in
-                Toast.makeText(requireActivity(), "You need to log in first.", Toast.LENGTH_SHORT).show();
-            } else if(bidText == null || bidText.equals("")) {
+                Snackbar.make(view, "You need to log in first." + username, Snackbar.LENGTH_SHORT).show();
+            } else if (bidText.equals("")) {
                 // There is already a user logged in
-                Toast.makeText(requireActivity(), "Please enter a bid.", Toast.LENGTH_SHORT).show();
+                Snackbar.make(view, "Please enter a bid.", Snackbar.LENGTH_SHORT).show();
             } else {
                 double bid = Double.parseDouble(binding.editTextBid.getText().toString());
+                bid = Math.round(bid * 100) / 100.0;
                 viewModel.giveBid(userId, productID, bid,
                         bidCreated -> {
-                            Toast.makeText(requireActivity(), "Bid is created: " + bidCreated.price, Toast.LENGTH_SHORT).show();
+                            Snackbar.make(view, "Bid is created: ₺" + bidCreated.price, Snackbar.LENGTH_SHORT).show();
                             // Reset editText
                             binding.editTextBid.setText("");
-                        }, error -> Toast.makeText(requireActivity(), error.message, Toast.LENGTH_SHORT).show());
+                        }, error -> Snackbar.make(view, error.message, Snackbar.LENGTH_SHORT).show());
             }
         });
 
@@ -143,13 +153,20 @@ public class ProductFragment extends Fragment {
     }
 
     private void addBidToList(Bid bid) {
-        bidList.add(bid);
+        if (bidList.size() > 0 && bidList.get(0).price == bid.price) {
+            return;
+        }
+        bidList.add(0, bid);
         bidListAdapter.notifyDataSetChanged();
     }
 
     private void increaseBidText(double increaseAmount) {
         Product currentProduct = viewModel.getProduct().getValue();
-        String price = "" + (currentProduct.price + increaseAmount);
-        binding.editTextBid.setText(price);
+        if (currentProduct != null) {
+            double newBid = currentProduct.price + increaseAmount;
+            newBid = Math.round(newBid * 100) / 100.0;
+            String price = Double.toString(newBid);
+            binding.editTextBid.setText(price);
+        }
     }
 }

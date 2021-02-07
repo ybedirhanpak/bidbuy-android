@@ -21,6 +21,7 @@ import com.yabepa.bidbuy.databinding.FragmentProductBinding;
 import com.yabepa.bidbuy.ui.bid.BidListAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * A fragment representing a list of Items.
@@ -66,6 +67,7 @@ public class BidListFragment extends Fragment {
 
         viewModel.getBidList().observe(requireActivity(), bids -> {
             bidList.clear();
+            Collections.reverse(bids);
             bidList.addAll(bids);
             adapter.notifyDataSetChanged();
         });
