@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">bidbuy</string>
+    <string name="app_name">BidBuy</string>
     <!--  Home  -->
     <string name="go_to_product_list">Go to product list</string>
     <string name="bidbuy_logo">BidBuy Logo</string>
